@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#3e0912">
+  <meta name="description" content="Tamil Hindu digital wedding invitation">
+
+  <!-- Social sharing metadata. Replace the relative image URL with the final
+       absolute production URL if your hosting platform requires one. -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ashwin &amp; Dilu — Wedding Invitation">
+  <meta property="og:description" content="Tamil Hindu digital wedding invitation">
+  <meta property="og:image" content="assets/OG%20image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="5000">
+  <meta property="og:image:height" content="2625">
+  <meta property="og:image:alt" content="Wedding invitation for Ashwin and Dilu">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ashwin &amp; Dilu — Wedding Invitation">
+  <meta name="twitter:description" content="Tamil Hindu digital wedding invitation">
+  <meta name="twitter:image" content="assets/OG%20image.png">
+  <meta name="twitter:image:alt" content="Wedding invitation for Ashwin and Dilu">
+
+  <title>Wedding Invitation</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body class="is-loading">
+  <div class="loading-screen" role="status" aria-live="polite" aria-label="Loading wedding invitation">
+    <span class="lamp-flame" aria-hidden="true"></span>
+  </div>
+
+  <!-- Starts from the invitation button and plays once; no loop or controls. -->
+  <audio id="background-music" src="assets/Card%20BG.m4a" preload="auto" aria-hidden="true"></audio>
+
+  <main class="wedding-experience" id="wedding-experience">
+    <section class="opening-scene" aria-label="Temple entrance">
+      <div class="temple" aria-hidden="true">
+        <div class="invitation-preview"></div>
+
+        <picture class="door left-door">
+          <source media="(max-width: 768px)" srcset="assets/left-door-mobile.webp">
+          <img src="assets/left-door-desktop.webp" alt="" draggable="false">
+        </picture>
+
+        <picture class="door right-door">
+          <source media="(max-width: 768px)" srcset="assets/right-door-mobile.webp">
+          <img src="assets/right-door-desktop.webp" alt="" draggable="false">
+        </picture>
+
+        <picture class="temple-frame">
+          <source media="(max-width: 768px)" srcset="assets/temple-frame-mobile.webp">
+          <img src="assets/temple-frame-desktop.webp" alt="" draggable="false">
+        </picture>
+      </div>
+
+      <button class="open-button" type="button" aria-label="Open wedding invitation" disabled>
+        <img src="assets/open-invitation-button.webp" alt="" draggable="false">
+      </button>
+    </section>
+
+    <section class="invitation" id="invitation" tabindex="-1" aria-label="Wedding invitation">
+      <div class="invitation-pages">
+        <!-- Add or remove page figures here. Keep them in invitation order.
+             Copy this figure, increment the filename/alt text, and use
+             loading="lazy" on every page after the first. -->
+        <figure class="invitation-page">
+          <img src="assets/invitation-pages/page-1.webp" alt="Wedding invitation, page 1" width="1170" height="3330" decoding="async" fetchpriority="high">
+        </figure>
+      </div>
+
+      <!-- Replace this file at the same path, or update href when changing the PDF. -->
+      <a class="download-button" href="assets/wedding-invitation.pdf" download>Download Invitation</a>
+    </section>
+  </main>
+</body>
+</html>
