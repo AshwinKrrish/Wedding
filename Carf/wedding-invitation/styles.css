@@ -1,0 +1,508 @@
+:root {
+  --maroon: #4b0b17;
+  --maroon-dark: #26050b;
+  --gold: #c49a45;
+  --gold-light: #e2c47d;
+  --ivory: #fff8e8;
+  --teak: #3a1c14;
+
+  /* Asset alignment controls: fine-tune these after replacing temple artwork. */
+  --temple-width: min(97vw, calc(96dvh * 1.5), 1700px);
+  --temple-height: calc(var(--temple-width) * 2 / 3);
+  --door-width: 23.5%;
+  --door-height: 66%;
+  --door-top: 14%;
+  --left-door-position: 26.5%;
+  --right-door-position: 26.5%;
+
+  /* Animation timing controls. Keep matching values in script.js. */
+  --button-fade-duration: 300ms;
+  --door-duration: 1800ms;
+  --scene-exit-duration: 900ms;
+  --cinematic-ease: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--ivory);
+  overflow-x: clip;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+  color: var(--maroon-dark);
+  background: var(--ivory) url("assets/background-texture.webp") center / 520px auto repeat;
+  font-family: Georgia, "Times New Roman", serif;
+  overflow-x: clip;
+}
+
+body.is-loading,
+body.is-closed,
+body.is-opening {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.loading-screen {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--ivory);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 450ms ease, visibility 450ms ease;
+}
+
+body.is-ready .loading-screen {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.lamp-flame {
+  width: 19px;
+  height: 32px;
+  border-radius: 70% 30% 65% 35% / 70% 35% 65% 30%;
+  background: #d9871c;
+  box-shadow: 0 0 16px 4px rgb(217 135 28 / 35%);
+  transform: rotate(45deg);
+  animation: flame 900ms ease-in-out infinite alternate;
+}
+
+.wedding-experience {
+  position: relative;
+  overflow-x: clip;
+}
+
+.opening-scene {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  overflow: clip;
+  background: var(--teak) url("assets/background-texture.webp") center / cover;
+  transition: opacity var(--scene-exit-duration) ease, transform var(--scene-exit-duration) var(--cinematic-ease), visibility var(--scene-exit-duration);
+}
+
+.temple {
+  position: relative;
+  width: var(--temple-width);
+  height: var(--temple-height);
+  max-width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right));
+  max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  isolation: isolate;
+  perspective: 1400px;
+  /* scale: 150%; */
+}
+
+.temple-frame,
+.temple-frame img {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+img.image-unavailable {
+  visibility: hidden;
+}
+
+.invitation-preview {
+  position: absolute;
+  z-index: 1;
+  top: var(--door-top);
+  left: 50%;
+  width: calc(var(--door-width) * 2);
+  height: var(--door-height);
+  transform: translateX(-50%) scale(0.985);
+  overflow: hidden;
+  background: var(--ivory) url("assets/invitation-pages/page-1.webp") top center / contain no-repeat;
+  opacity: 0;
+  filter: blur(5px);
+  transition: opacity 800ms ease, filter 1000ms ease, transform 1000ms ease;
+}
+
+.door {
+  position: absolute;
+  z-index: 3;
+  top: var(--door-top);
+  width: var(--door-width);
+  height: var(--door-height);
+  display: block;
+  overflow: hidden;
+  will-change: transform, filter, opacity;
+  backface-visibility: hidden;
+  transition: transform var(--door-duration) var(--cinematic-ease), filter var(--door-duration) ease, opacity 600ms ease;
+}
+
+.door img {
+  position: absolute;
+  top: 0;
+  width: auto;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  user-select: none;
+}
+
+.left-door {
+  z-index: 2;
+  left: var(--left-door-position);
+  transform-origin: left center;
+}
+
+.left-door img {
+  right: -18.5%;
+}
+
+.right-door {
+  z-index: 3;
+  right: var(--right-door-position);
+  transform-origin: right center;
+}
+
+.right-door img {
+  left: -18.5%;
+}
+
+.open-button {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  left: 50%;
+  width: clamp(150px, 19vw, 245px);
+  aspect-ratio: 2.15;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  overflow: hidden;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  animation: float 2.8s ease-in-out infinite;
+  transition: opacity var(--button-fade-duration) ease, filter 180ms ease;
+}
+
+.open-button img {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  transform: translateY(-41.9%);
+  transition: transform 180ms ease;
+}
+
+.open-button:hover {
+  filter: brightness(1.06);
+  animation-play-state: paused;
+}
+
+.open-button:hover img {
+  transform: translateY(-41.9%) scale(1.035);
+}
+
+.open-button:active img {
+  transform: translateY(-41.9%) scale(0.975);
+}
+
+.open-button:focus-visible,
+.download-button:focus-visible,
+.invitation:focus-visible {
+  outline: 3px solid var(--gold-light);
+  outline-offset: 5px;
+}
+
+.open-button:disabled {
+  cursor: default;
+}
+
+.invitation {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding: max(28px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(42px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  background: var(--ivory) url("assets/background-texture.webp") center top / 520px auto repeat;
+  opacity: 0;
+  transform: scale(0.985);
+  filter: blur(4px);
+  pointer-events: none;
+  transition: opacity 900ms ease, transform 1000ms var(--cinematic-ease), filter 1000ms ease;
+}
+
+.invitation-pages {
+  display: grid;
+  justify-items: center;
+  gap: clamp(10px, 1.5vw, 18px);
+}
+
+.invitation-page {
+  width: min(92vw, 850px);
+  margin: 0;
+  line-height: 0;
+  background: var(--ivory);
+  box-shadow: 0 7px 24px rgb(38 5 11 / 12%);
+}
+
+.invitation-page img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.download-button {
+  width: fit-content;
+  min-height: 44px;
+  margin: clamp(26px, 4vw, 46px) auto 0;
+  padding: 11px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--gold);
+  border-radius: 3px;
+  color: var(--ivory);
+  background: var(--maroon);
+  box-shadow: 0 3px 10px rgb(38 5 11 / 10%);
+  font: 600 0.9rem/1.2 Georgia, "Times New Roman", serif;
+  letter-spacing: 0.025em;
+  text-decoration: none;
+  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.download-button:hover {
+  color: var(--maroon-dark);
+  background: var(--gold-light);
+  transform: translateY(-1px);
+}
+
+.wedding-experience.is-activated .open-button {
+  opacity: 0;
+  pointer-events: none;
+  animation: none;
+}
+
+.wedding-experience.invitation-open .left-door {
+  transform: perspective(1400px) rotateY(-105deg);
+  filter: brightness(0.72) drop-shadow(12px 5px 12px rgb(0 0 0 / 28%));
+}
+
+.wedding-experience.invitation-open .right-door {
+  transform: perspective(1400px) rotateY(105deg);
+  filter: brightness(0.72) drop-shadow(-12px 5px 12px rgb(0 0 0 / 28%));
+}
+
+.wedding-experience.is-revealing .invitation-preview {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+  filter: blur(0);
+}
+
+.wedding-experience.is-revealing .invitation {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.wedding-experience.is-readable .invitation {
+  pointer-events: auto;
+}
+
+.wedding-experience.is-readable .opening-scene {
+  opacity: 0;
+  transform: translateY(-8vh) scale(1.015);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50% { transform: translate(-50%, calc(-50% - 6px)); }
+}
+
+@keyframes flame {
+  from { transform: rotate(43deg) scale(0.9, 1); opacity: 0.78; }
+  to { transform: rotate(47deg) scale(1.05, 1.1); opacity: 1; }
+}
+
+/* Mobile temple geometry: tune these values without affecting desktop. */
+@media (max-width: 768px) {
+  :root {
+    --mobile-frame-ratio: 0.666667;
+    --mobile-temple-width: clamp(
+      245px,
+      min(100vw, calc((100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * var(--mobile-frame-ratio))),
+      720px
+    );
+    --mobile-temple-height: calc(var(--mobile-temple-width) * 3 / 2);
+    --mobile-doorway-width: 54%;
+    --mobile-door-width: calc(var(--mobile-doorway-width) / 2);
+    --mobile-door-top: 15%;
+    --mobile-door-bottom: 15.5%;
+    --mobile-door-height: calc(100% - var(--mobile-door-top) - var(--mobile-door-bottom));
+    --mobile-left-door-left: calc((100% - var(--mobile-doorway-width)) / 2);
+    --mobile-right-door-right: calc((100% - var(--mobile-doorway-width)) / 2);
+    --mobile-button-offset: calc(var(--mobile-temple-height) * -0.0025);
+
+    --temple-width: var(--mobile-temple-width);
+    --temple-height: var(--mobile-temple-height);
+    --door-width: var(--mobile-door-width);
+    --door-height: var(--mobile-door-height);
+    --door-top: var(--mobile-door-top);
+    --left-door-position: var(--mobile-left-door-left);
+    --right-door-position: var(--mobile-right-door-right);
+  }
+
+  .temple {
+    position: relative;
+    width: var(--temple-width);
+    height: var(--temple-height);
+    max-width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right));
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    margin: auto;
+    transform: none;
+    scale: 150%;
+  }
+
+  .invitation-preview {
+    z-index: 2;
+    background-position: top center;
+    background-size: cover;
+  }
+
+  /* Mobile remains a single framed invitation after the doors open. */
+  .invitation {
+    display: none;
+  }
+
+  .wedding-experience.is-readable .opening-scene {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: none;
+  }
+
+  .temple-frame {
+    z-index: 4;
+    display: block;
+  }
+
+  .temple-frame,
+  .temple-frame img {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .left-door {
+    z-index: 3;
+    left: var(--left-door-position);
+    transform-origin: left center;
+  }
+
+  .right-door {
+    z-index: 3;
+    right: var(--right-door-position);
+    transform-origin: right center;
+  }
+
+  .left-door img {
+    right: -53%;
+  }
+
+  .right-door img {
+    left: -53%;
+  }
+
+  .open-button {
+    z-index: 5;
+    top: calc(50% + var(--mobile-button-offset));
+    width: clamp(154px, 46vw, 220px);
+  }
+
+  .opening-scene {
+    min-height: 100dvh;
+    overflow: hidden;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    background-size: auto 100%;
+  }
+
+  body,
+  .wedding-experience {
+    overflow-x: hidden;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .open-button {
+    width: clamp(130px, 20vw, 190px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 180ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .wedding-experience.invitation-open .left-door {
+    transform: translateX(-16%) scale(0.98);
+    opacity: 0;
+    filter: none;
+  }
+
+  .wedding-experience.invitation-open .right-door {
+    transform: translateX(16%) scale(0.98);
+    opacity: 0;
+    filter: none;
+  }
+
+  .wedding-experience.is-readable .opening-scene {
+    transform: none;
+  }
+
+  .wedding-experience.is-revealing .invitation {
+    transition: none !important;
+  }
+}
