@@ -1,0 +1,409 @@
+:root {
+  --ivory: #fff6df;
+  --gold: #d7a53d;
+  --deep-brown: #1b0b05;
+  --door-duration: 2000ms; /* Keep in sync with script.js. */
+  --zoom-duration: 950ms;
+  --cinematic-ease: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--deep-brown);
+}
+
+body {
+  color: var(--ivory);
+  font-family: Georgia, "Times New Roman", serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+}
+
+.loading-screen {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #fff7e7;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 420ms ease, visibility 420ms ease;
+}
+
+body.is-ready .loading-screen {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.lamp-flame {
+  width: 18px;
+  height: 30px;
+  border-radius: 72% 28% 68% 32% / 72% 34% 66% 28%;
+  background: #d98219;
+  box-shadow: 0 0 17px 4px rgb(217 130 25 / 32%);
+  transform: rotate(45deg);
+  animation: lampFlame 850ms ease-in-out infinite alternate;
+}
+
+.wedding-app,
+.temple-scene {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.wedding-app {
+  position: relative;
+  opacity: 0;
+  transition: opacity 420ms ease;
+}
+
+body.is-ready .wedding-app {
+  opacity: 1;
+}
+
+.temple-scene {
+  position: relative;
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  /* background: #fbebd9; */
+  background: #241006;
+  isolation: isolate;
+}
+
+/*
+ * The single temple asset is 1536×1024 (3:2). Its height always follows the
+ * viewport, so the image, doorway, doors, and button scale as one composition.
+ * Narrow screens naturally crop only the artwork's outer left/right edges.
+ */
+.temple-artwork {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: 150vh;
+  height: 100vh;
+  width: 150dvh;
+  height: 100dvh;
+  overflow: visible;
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  transition: filter 750ms ease, transform 900ms var(--cinematic-ease);
+}
+
+.temple-background {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+/*
+ * Doorway coordinates measured from weddin temple.png's transparent opening:
+ * x=697, y=588, width=152, height=276 on a 1536×1024 canvas.
+ * Fine-tune only these four values if the temple artwork is ever replaced.
+ */
+.temple-artwork {
+  --doorway-left: 45.377604%;
+  --doorway-top: 57.421875%;
+  --doorway-width: 9.895833%;
+  --doorway-height: 26.953125%;
+  --button-left: 50.325521%; /* Exact horizontal centre of the doorway. */
+  --button-top: 70.898438%; /* Exact vertical centre of the doorway. */
+}
+
+.doorway,
+.invitation-stage {
+  position: absolute;
+  top: var(--doorway-top);
+  left: var(--doorway-left);
+  width: var(--doorway-width);
+  height: var(--doorway-height);
+}
+
+.doorway {
+  z-index: 3;
+  overflow: visible;
+  perspective: 1600px;
+  transform-style: preserve-3d;
+  transition: filter 750ms ease;
+}
+
+.temple-door {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: block;
+  object-fit: fill;
+  backface-visibility: hidden;
+  will-change: transform, filter, opacity;
+  transition:
+    transform var(--door-duration) var(--cinematic-ease),
+    filter var(--door-duration) ease,
+    opacity 180ms ease;
+  user-select: none;
+}
+
+.temple-door-left {
+  left: 0;
+  transform-origin: left center;
+}
+
+.temple-door-right {
+  right: 0;
+  transform-origin: right center;
+}
+
+.invitation-stage {
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #fbebd9;
+    /* background: #321003; */
+  opacity: 0;
+  transform: scale(0.82);
+  transform-origin: center;
+  filter: blur(8px);
+  will-change: opacity, transform, filter;
+  transition:
+    opacity 800ms ease 320ms,
+    transform 1000ms var(--cinematic-ease) 260ms,
+    filter 850ms ease 280ms,
+    background-color 700ms ease;
+}
+
+.invitation-stage-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invitation-image {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  object-fit: contain;
+  /* box-shadow: 0 8px 30px rgb(0 0 0 / 22%); */
+  transform-origin: top left;
+}
+
+.open-invitation-button {
+  position: absolute;
+  z-index: 5;
+  top: var(--button-top);
+  left: var(--button-left);
+  width: clamp(170px, 26dvh, 300px);
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  animation: invitationButtonPulse 2.7s ease-in-out infinite;
+  transition: opacity 320ms ease, transform 320ms ease, filter 220ms ease;
+}
+
+.open-invitation-button img {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  transition: transform 180ms ease;
+}
+
+.open-invitation-button:hover img {
+  transform: scale(1.035);
+}
+
+.open-invitation-button:active img {
+  transform: scale(0.975);
+}
+
+.open-invitation-button:focus-visible,
+.invitation-image:focus-visible {
+  outline: 3px solid var(--ivory);
+  outline-offset: 5px;
+}
+
+.open-invitation-button:disabled {
+  cursor: default;
+}
+
+.wedding-app.invitation-open .open-invitation-button {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.82);
+  animation: none;
+  pointer-events: none;
+}
+
+.wedding-app.invitation-open .temple-door-left {
+  transform: perspective(1600px) rotateY(-105deg);
+  filter: brightness(0.72) drop-shadow(10px 5px 10px rgb(0 0 0 / 32%));
+}
+
+.wedding-app.invitation-open .temple-door-right {
+  transform: perspective(1600px) rotateY(105deg);
+  filter: brightness(0.72) drop-shadow(-10px 5px 10px rgb(0 0 0 / 32%));
+}
+
+.wedding-app.invitation-open .invitation-stage {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.wedding-app.invitation-expanded .temple-artwork {
+  filter: brightness(0.42) blur(2px);
+  transform: translate(-50%, -50%) scale(1.015);
+}
+
+.wedding-app.invitation-expanded .doorway {
+  filter: brightness(0.55) blur(1px);
+}
+
+.wedding-app.invitation-expanded .invitation-stage {
+  --reading-pad-top: max(20px, env(safe-area-inset-top));
+  --reading-pad-right: max(14px, env(safe-area-inset-right));
+  --reading-pad-bottom: max(20px, env(safe-area-inset-bottom));
+  --reading-pad-left: max(14px, env(safe-area-inset-left));
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  min-height: 100vh;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding:
+    var(--reading-pad-top)
+    var(--reading-pad-right)
+    var(--reading-pad-bottom)
+    var(--reading-pad-left);
+      background: rgb(18 10 5 / 0%);
+  /* background: rgb(18 10 5 / 88%); */
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition: background-color 700ms ease;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.wedding-app.invitation-expanded .invitation-stage-inner {
+  width: 100%;
+  height: auto;
+  min-height: calc(
+    100vh - var(--reading-pad-top) - var(--reading-pad-bottom)
+  );
+  min-height: calc(
+    100dvh - var(--reading-pad-top) - var(--reading-pad-bottom)
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.wedding-app.invitation-expanded .invitation-image {
+  width: min(94vw, 900px);
+  height: auto;
+  max-width: 100%;
+  flex: 0 0 auto;
+  margin-block: auto;
+  border-radius: 4px;
+  box-shadow: 0 14px 46px rgb(0 0 0 / 38%);
+}
+
+@keyframes invitationButtonPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    filter: drop-shadow(0 8px 18px rgb(0 0 0 / 35%));
+  }
+  50% {
+    transform: translate(-50%, -54%) scale(1.035);
+    filter: drop-shadow(0 12px 26px rgb(212 175 55 / 48%));
+  }
+}
+
+@keyframes lampFlame {
+  from {
+    transform: rotate(43deg) scale(0.9, 1);
+    opacity: 0.78;
+  }
+  to {
+    transform: rotate(47deg) scale(1.05, 1.1);
+    opacity: 1;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .open-invitation-button {
+    width: clamp(138px, 25dvh, 190px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+
+  .wedding-app.invitation-open .temple-door-left,
+  .wedding-app.invitation-open .temple-door-right {
+    transform: none;
+    opacity: 0;
+    filter: none;
+    transition: opacity 180ms ease !important;
+  }
+
+  .wedding-app.invitation-open .invitation-stage {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none !important;
+  }
+
+  .wedding-app.invitation-expanded .temple-artwork,
+  .wedding-app.invitation-expanded .doorway {
+    transition: none !important;
+  }
+
+}

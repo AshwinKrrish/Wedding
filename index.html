@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2b1208">
+  <meta name="description" content="Ashwin and Dilu's Tamil Hindu wedding invitation">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ashwin &amp; Dilu — Wedding Invitation">
+  <meta property="og:description" content="Ashwin and Dilu's Tamil Hindu wedding invitation">
+  <meta property="og:image" content="/assets/og-image.png">
+  <meta property="og:image:secure_url" content="/assets/og-image.png">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Wedding invitation for Ashwin and Dilu">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ashwin &amp; Dilu — Wedding Invitation">
+  <meta name="twitter:description" content="Ashwin and Dilu's Tamil Hindu wedding invitation">
+  <meta name="twitter:image" content="/assets/og-image.png">
+  <meta name="twitter:image:alt" content="Wedding invitation for Ashwin and Dilu">
+
+  <title>Ashwin &amp; Dilu — Wedding Invitation</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body class="is-loading">
+  <div class="loading-screen" role="status" aria-live="polite" aria-label="Loading wedding invitation">
+    <span class="lamp-flame" aria-hidden="true"></span>
+  </div>
+
+  <main class="wedding-app" id="weddingApp">
+    <section class="temple-scene" id="templeScene" aria-label="Wedding invitation entrance">
+      <!-- One 3:2 coordinate space keeps every layer aligned to the temple art. -->
+      <div class="temple-artwork" id="templeArtwork">
+        <div class="invitation-stage" id="invitationStage">
+          <div class="invitation-stage-inner">
+            <img
+              src="./assets/Invitation Page.webp"
+              alt="Wedding invitation for Ashwin and Dilu"
+              class="invitation-image"
+              id="invitationImage"
+              width="5275"
+              height="7035"
+              decoding="async"
+              tabindex="-1"
+            >
+          </div>
+        </div>
+
+        <div class="doorway" aria-hidden="true">
+          <img
+            src="./assets/weddin temple door left.png"
+            alt=""
+            class="temple-door temple-door-left"
+            width="76"
+            height="276"
+            decoding="async"
+            draggable="false"
+          >
+          <img
+            src="./assets/weddin temple door right.png"
+            alt=""
+            class="temple-door temple-door-right"
+            width="76"
+            height="276"
+            decoding="async"
+            draggable="false"
+          >
+        </div>
+
+        <img
+          src="./assets/weddin temple.png"
+          alt=""
+          class="temple-background"
+          width="1536"
+          height="1024"
+          decoding="async"
+          aria-hidden="true"
+          draggable="false"
+        >
+
+        <button
+          class="open-invitation-button"
+          id="openInvitationButton"
+          type="button"
+          aria-label="Open wedding invitation"
+          disabled
+        >
+          <img
+            src="./assets/open button.png"
+            alt=""
+            width="1536"
+            height="1024"
+            decoding="async"
+            draggable="false"
+          >
+        </button>
+      </div>
+    </section>
+
+    <audio id="doorAudio" src="./assets/Card BG.m4a" preload="auto" aria-hidden="true"></audio>
+  </main>
+</body>
+</html>
